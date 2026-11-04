@@ -23,3 +23,6 @@ export type NightDigest = {
 // Reads runs/<night>.jsonl. Returns null when the night has no file (the route maps that to 404).
 // § 2 implements this in src/digest/reader.ts against this signature.
 export type ReadNight = (runsDir: string, night: string) => NightDigest | null;
+
+// One night on the status board: a link target with its ok / retry / fail counts (plan.md § 2c).
+export type NightLink = { night: string; ok: number; retry: number; fail: number };

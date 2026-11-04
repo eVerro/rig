@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { DigestRow, JobStatus, NightDigest, ReadNight } from './types.js';
+import type { DigestRow, JobStatus, NightDigest, NightLink, ReadNight } from './types.js';
 
 // Parse one JSONL line at the edge; return null for anything that isn't a well-formed entry
 // (plan.md § 1: a bad line is counted, never thrown).
@@ -71,3 +71,11 @@ export const readNight: ReadNight = (runsDir, night): NightDigest | null => {
   const rows = [...byJob.values()].map(fold).sort((a, b) => a.job.localeCompare(b.job));
   return { night, rows, badLines, counts };
 };
+
+// For the status board: each night on disk with its status counts (plan.md § 2c).
+export function nightLinks(runsDir: string, nights: string[]): NightLink[] {
+  return nights.flatMap((night) => {
+    const digest = readNight(runsDir, night);
+    return digest ? [{ night, ...digest.counts }] : [];
+  });
+}
