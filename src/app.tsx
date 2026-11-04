@@ -37,5 +37,8 @@ export function createApp(config: RigConfig = loadConfig()) {
     return c.json(digest.rows);
   });
 
+  // Nights on disk with their ok/retry/fail counts, newest first. Agents read this to find a night.
+  app.get('/api/nights', (c) => c.json(nightLinks(config.runsDir, nightsOnDisk(config.runsDir))));
+
   return app;
 }
